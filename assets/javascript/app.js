@@ -15,38 +15,21 @@ $(document).ready(function () {
     function buttonClick() {
         $(".btn").on("click", function () {
             var q = $(this).text();
-            var lower = q.toLowerCase();
-            console.log(lower);
-            // var query = "https://api.giphy.com/v1/gifs/search?q=" + q + "&api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&limit=10&offset=0&rating=G&lang=en";
-            // console.log(query);
 
-            var test = "https://api.giphy.com/v1/gifs/search?api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&q=" + q + "&limit=10&offset=0&rating=G&lang=en";
+            var query = "https://api.giphy.com/v1/gifs/search?api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&q=" + q + "&limit=10&offset=0&rating=G&lang=en";
 
             $.ajax({
-                url: test,
+                url: query,
                 method: "GET"
             }).then(function (response) {
-                console.log(response);
-                var gifs = 
+                var results = response.data;
+                console.log(results);
+                console.log(results[4]);
+                var gif = $("<img>");
+
             });
         });
     }
-
-    // $(".btn").on("click", function () {
-    //     var key="api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&";
-    //     var q = $(this).text();
-    //     var query = "https://api.giphy.com/v1/gifs/search?q=" + q + "&api_key=" + key + "limit=10&offset=0&rating=G&lang=en";
-    //     console.log(q);
-
-    //"http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5"
-
-    // $.ajax({
-    //     url: query,
-    //     method: "GET"
-    // }).then(function (response) {
-    //     console.log(response);
-    // });
-    // });
 
     $("#submit").on("click", function () {
         event.preventDefault();
