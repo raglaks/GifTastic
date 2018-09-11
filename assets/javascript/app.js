@@ -1,4 +1,4 @@
-var rappers = ["Snoop Dogg", "Eazy E", "Wiki", "A$AP Ferg", "Death Grips", "Juicy J", "YBN Cordae", "Mac Miller", "Playboi Carti", "Rae Sremmurd", "DOOM", "Waka Flocka Flame"];
+var rappers = ["Snoop Dogg", "N.W.A.", "Kid Cudi", "A$AP Ferg", "Death Grips", "Kanye West", "Playboi Carti", "Rae Sremmurd"];
 
 var click = false;
 
@@ -7,13 +7,13 @@ var click = false;
 $(document).ready(function () {
 
     $(rappers).each(function addButtons(index, element) {
-        $("#buttons").append("<button type='button' class='btn btn-dark' id=" + index + ">" + element + "</button>");
+        $("#buttons").append("<button type='button' class='button btn btn-dark' id=" + index + ">" + element + "</button>");
     });
 
     buttonClick();
 
     function buttonClick() {
-        $(".btn").on("click", function () {
+        $(".button").on("click", function () {
             var q = $(this).text();
 
             var query = "https://api.giphy.com/v1/gifs/search?api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&q=" + q + "&limit=10&offset=0&rating=G&lang=en";
@@ -23,9 +23,21 @@ $(document).ready(function () {
                 method: "GET"
             }).then(function (response) {
                 var results = response.data;
-                console.log(results);
-                console.log(results[4]);
-                var gif = $("<img>");
+
+                $(results).each(function (index) {
+                    var gifDiv = $("<span>");
+                    var rating = results[index].rating;
+                    var p = $("<p>").text("Rating: " + rating);
+                    var src = results[index].images.fixed_height_still.url;
+                    var gif = $("<img>");
+
+                    gif.attr("src", src);
+
+                    gifDiv.prepend(p);
+                    gifDiv.prepend(gif);
+
+                    $("#gifs").prepend(gifDiv);
+                });
 
             });
         });
@@ -38,17 +50,14 @@ $(document).ready(function () {
 
     function addRapper() {
         click = true;
-        console.log(click);
         var search = $("#rapper").val();
-        console.log(search);
         rappers.push(search);
 
         if (click === true) {
             console.log(rappers);
             var last = rappers[rappers.length - 1];
             var index = rappers.indexOf(last);
-            console.log(last);
-            $("#buttons").append("<button type='button' class='btn btn-dark' id=" + index + ">" + last + "</button>");
+            $("#buttons").append("<button type='button' class='button btn btn-dark' id=" + index + ">" + last + "</button>");
             click = false;
             buttonClick();
         };
