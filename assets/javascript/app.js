@@ -25,48 +25,55 @@ $(document).ready(function () {
                 var results = response.data;
 
                 $(results).each(function (index) {
+                    //create div element to hold each gif
                     var gifDiv = $("<div class='text-center'>");
+                    //get rating from api and store it as variable
                     var rating = results[index].rating;
+                    //create p element and add the rating to it
                     var p = $("<p>").text("Rating: " + rating);
-
-                    var src = results[index].images.fixed_height_still.url;
-                    var animate = results[index].images.fixed_height.url;
-                    var still = results[index].images.fixed_height_still.url;
-                    var state = "still";
-
+                    //image element is created here
                     var gif = $("<img>");
 
-                    gif.attr("src", src);
-                    gif.attr("data-state", state);
-                    gif.attr("data-still", still);
-                    gif.attr("data-animate", animate);
+                    //source url for image from api (still by default)
+                    var srcURL = results[index].images.fixed_height_still.url;
+                    //source animated url for image from api
+                    var animateURL = results[index].images.fixed_height.url;
+                    //source still url for image from api
+                    var stillURL = results[index].images.fixed_height_still.url;
 
+                    //state string variable is set here
+                    //var still = "still";
+                    //var animate = "animate";
+
+                    //attributed are added to image from the previous variables
+                    gif.attr("src", srcURL);
+                    //gif.attr("data-state", "still");
+                    gif.attr("data-still", stillURL);
+                    gif.attr("data-animate", animateURL);
+                    gif.attr("data-state", "still");
+
+
+                    //everything is then added to image divs
                     gifDiv.prepend(p);
                     gifDiv.prepend(gif);
 
+                    //gifDiv is then added to the DOM ID
                     $("#gifs").prepend(gifDiv);
 
                     $(gif).on("click", function () {
-                        if (state == "animate") {
-                            $(this).attr("src", still);
+                        console.log(this);
+                        var state = $(this).attr("data-state");
+                        console.log(state);
+                        if (state == "still") {
+                            $(this).attr("src", animateURL);
+                            $(this).attr("data-state", "animate");
+                        } else {
+                            $(this).attr("src", stillURL);
                             $(this).attr("data-state", "still");
-                            console.log(this);
                         }
-
-                        // if (state == "still") {
-                        //     $(this).attr("src", animate);
-                        //     $(this).attr("data-state", "animate");
-                        //     console.log(this);
-                        //     console.log(state);
-                        // } else {
-                        //     $(this).attr("src", still);
-                        //     $(this).attr("data-state", "still");
-                        //     console.log(this);
-                        // }
 
                     });
 
-                    console.log(gif);
                 });
 
             });
