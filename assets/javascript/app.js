@@ -1,4 +1,6 @@
-var rappers = ["Snoop Dogg", "Kid Cudi", "A$AP Ferg", "Death Grips", "Kanye West", "Dipset"];
+var rappers = ["Snoop Dogg", "Kid Cudi", "A$AP Ferg", "Drake"];
+
+var favs = [];
 
 var click = false;
 
@@ -24,28 +26,43 @@ $(document).ready(function () {
             }).then(function (response) {
                 var results = response.data;
 
-                $(results).each(function (index) {
+                $(results).each(function (index, element) {
                     //create div element to hold each gif
                     var gifDiv = $("<div class='space'>");
                     //get rating from api and store it as variable
                     var rating = results[index].rating;
                     //create p element and add the rating to it
-                    var p = $("<span>").text("Rating: " + rating);
+                    var p = $("<p>").text("Rating: " + rating);
                     //image element is created here
                     var gif = $("<img>");
+                    //number of frames in gif
+                    var frames = results[index].images.original.frames;
+                    var p1 = $("<p>").text("Number of frames: " + frames);
+                    
+                    //download
+                    var a = $("<a>");
+                    a.attr("href", results[index].images.fixed_height.url);
+                    a.attr("download", "text.gif");
+                    //a.attr("download", results[index]._score + ".gif");
+                    //a.attr("class", "download")
+                    a.text("click to download");
 
+                    //favs
+                    var b = $("<button>");
+
+                    b.attr("class", "btn btn-success border border-secondary rounded-0");
+                    b.text("Fav this gif");
+                    b.attr("id", "fav");
+
+                    
                     //source url for image from api (still by default)
                     var srcURL = results[index].images.fixed_height_still.url;
                     //source animated url for image from api
                     var animateURL = results[index].images.fixed_height.url;
                     //source still url for image from api
                     var stillURL = results[index].images.fixed_height_still.url;
-
-                    //state string variable is set here
-                    //var still = "still";
-                    //var animate = "animate";
-
-                    //attributed are added to image from the previous variables
+                    
+                    //attributes are added to image from the previous variables
                     gif.attr("src", srcURL);
                     //gif.attr("data-state", "still");
                     gif.attr("data-still", stillURL);
@@ -54,12 +71,21 @@ $(document).ready(function () {
                     //everything is then added to image divs
                     gifDiv.prepend(gif);
                     gifDiv.append(p);
+                    gifDiv.append(p1);
+                    gifDiv.append(b);
 
                     if (index <= 4) {
                         $("#gifsLeft").prepend(gifDiv);
                     } else if (index > 5) {
                         $("#gifsRight").prepend(gifDiv);
                     }
+
+                    $(b).on("click", function() {
+                        console.log(favs);
+                        favs.push(gif);
+                        console.log(favs);
+                        $(gifDiv).remove();
+                    });
 
                     $(gif).on("click", function () {
                         console.log(this);
@@ -76,6 +102,8 @@ $(document).ready(function () {
 
                         }
 
+                        
+
                     });
 
                 });
@@ -84,9 +112,29 @@ $(document).ready(function () {
         });
     }
 
+    $("#favSection").on("click", function () {
+        $("#gifsLeft").html("");
+        $("#gifsRight").html("");
+
+        $(favs).each(function(index, element) {
+            console.log(element);
+            if (index % 2) {
+                console.log("even");
+                console.log(element);
+                $("#gifsRight").append(element);
+                //var gifDiv = $("<div class='space'>");
+            } else {
+                console.log("odd");
+                console.log(element);
+                $("#gifsLeft").append(element);
+            }
+        })
+    });
+
     $("#submit").on("click", function () {
         event.preventDefault();
         addRapper();
+        
     });
 
     function addRapper() {
