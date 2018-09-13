@@ -5,3 +5,7 @@
 .capitalize {
     text-transform: capitalize;   
 }
+
+.space {
+    margin: 6px;
+}

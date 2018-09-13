@@ -7,7 +7,7 @@ var click = false;
 $(document).ready(function () {
 
     $(rappers).each(function addButtons(index, element) {
-        $("#buttons").append("<button type='button' class='button btn btn-dark' id=" + index + ">" + element + "</button>");
+        $("#buttons").append("<button type='button' class='button btn btn-dark border border-secondary rounded-0' id=" + index + ">" + element + "</button>");
     });
 
     buttonClick();
@@ -16,7 +16,7 @@ $(document).ready(function () {
         $(".button").on("click", function () {
             var q = $(this).text();
 
-            var query = "https://api.giphy.com/v1/gifs/search?api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&q=" + q + "&limit=10&offset=0&rating=G&lang=en";
+            var query = "https://api.giphy.com/v1/gifs/search?api_key=gExGz1op3rDKAfukLQUSgqIyMQQbKeWr&q=" + q + "&limit=11&offset=0&rating=G&lang=en";
 
             $.ajax({
                 url: query,
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
                 $(results).each(function (index) {
                     //create div element to hold each gif
-                    var gifDiv = $("<span>");
+                    var gifDiv = $("<div class='space'>");
                     //get rating from api and store it as variable
                     var rating = results[index].rating;
                     //create p element and add the rating to it
@@ -35,11 +35,11 @@ $(document).ready(function () {
                     var gif = $("<img>");
 
                     //source url for image from api (still by default)
-                    var srcURL = results[index].images.fixed_width_still.url;
+                    var srcURL = results[index].images.fixed_height_still.url;
                     //source animated url for image from api
-                    var animateURL = results[index].images.fixed_width.url;
+                    var animateURL = results[index].images.fixed_height.url;
                     //source still url for image from api
-                    var stillURL = results[index].images.fixed_width_still.url;
+                    var stillURL = results[index].images.fixed_height_still.url;
 
                     //state string variable is set here
                     //var still = "still";
@@ -51,26 +51,29 @@ $(document).ready(function () {
                     gif.attr("data-still", stillURL);
                     gif.attr("data-animate", animateURL);
                     gif.attr("data-state", "still");
-
-
                     //everything is then added to image divs
-                    
                     gifDiv.prepend(gif);
+                    gifDiv.append(p);
 
-                    //gifDiv is then added to the DOM ID
-                    $("#gifs").prepend(gifDiv);
+                    if (index <= 4) {
+                        $("#gifsLeft").prepend(gifDiv);
+                    } else if (index > 5) {
+                        $("#gifsRight").prepend(gifDiv);
+                    }
 
                     $(gif).on("click", function () {
                         console.log(this);
                         var state = $(this).attr("data-state");
-                        gifDiv.append(p);
+
                         console.log(state);
                         if (state == "still") {
                             $(this).attr("src", animateURL);
                             $(this).attr("data-state", "animate");
+
                         } else {
                             $(this).attr("src", stillURL);
                             $(this).attr("data-state", "still");
+
                         }
 
                     });
@@ -96,7 +99,7 @@ $(document).ready(function () {
             console.log(rappers);
             var last = rappers[rappers.length - 1];
             var index = rappers.indexOf(last);
-            $("#buttons").append("<button type='button' class='button capitalize btn btn-dark' id=" + index + ">" + last + "</button>");
+            $("#buttons").append("<button type='button' class='button capitalize btn btn-dark border border-secondary rounded-0' id=" + index + ">" + last + "</button>");
             click = false;
             buttonClick();
         };
