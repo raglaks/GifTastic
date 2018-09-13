@@ -1,4 +1,4 @@
-var rappers = ["Snoop Dogg", "N.W.A.", "Kid Cudi", "A$AP Ferg", "Death Grips", "Kanye West", "Playboi Carti", "Rae Sremmurd"];
+var rappers = ["Snoop Dogg", "Kid Cudi", "A$AP Ferg", "Death Grips", "Kanye West", "Dipset"];
 
 var click = false;
 
@@ -26,20 +26,20 @@ $(document).ready(function () {
 
                 $(results).each(function (index) {
                     //create div element to hold each gif
-                    var gifDiv = $("<div class='text-center'>");
+                    var gifDiv = $("<span>");
                     //get rating from api and store it as variable
                     var rating = results[index].rating;
                     //create p element and add the rating to it
-                    var p = $("<p>").text("Rating: " + rating);
+                    var p = $("<span>").text("Rating: " + rating);
                     //image element is created here
                     var gif = $("<img>");
 
                     //source url for image from api (still by default)
-                    var srcURL = results[index].images.fixed_height_still.url;
+                    var srcURL = results[index].images.fixed_width_still.url;
                     //source animated url for image from api
-                    var animateURL = results[index].images.fixed_height.url;
+                    var animateURL = results[index].images.fixed_width.url;
                     //source still url for image from api
-                    var stillURL = results[index].images.fixed_height_still.url;
+                    var stillURL = results[index].images.fixed_width_still.url;
 
                     //state string variable is set here
                     //var still = "still";
@@ -54,7 +54,7 @@ $(document).ready(function () {
 
 
                     //everything is then added to image divs
-                    gifDiv.prepend(p);
+                    
                     gifDiv.prepend(gif);
 
                     //gifDiv is then added to the DOM ID
@@ -63,6 +63,7 @@ $(document).ready(function () {
                     $(gif).on("click", function () {
                         console.log(this);
                         var state = $(this).attr("data-state");
+                        gifDiv.append(p);
                         console.log(state);
                         if (state == "still") {
                             $(this).attr("src", animateURL);
