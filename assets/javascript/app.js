@@ -81,20 +81,16 @@ $(document).ready(function () {
                     }
 
                     $(b).on("click", function () {
-
+                        $(gifDiv).remove();
+                        //selecting the whole array for the gif faved
                         var elem = gif[0];
-
+                        //pushing array to favs array
                         favs.push(elem);
 
-                        console.log(favs);
-
+                        //selecting the element from each of the arrays
                         var outers = elem.outerHTML;
-
+                        //pushing them to links array, so that it can be JSON'ed for locacStorage
                         links.push(outers);
-
-                        console.log(links);
-
-                        $(gifDiv).remove();
 
                         var string = JSON.stringify(links);
                         localStorage.setItem("rappers", string);
@@ -126,8 +122,8 @@ $(document).ready(function () {
     }
 
     $("#favSection").on("click", function () {
-        // $("#gifsLeft").html("");
-        // $("#gifsRight").html("");
+        $("#gifsLeft").html("");
+        $("#gifsRight").html("");
 
         var retrieve = localStorage.getItem("rappers");
         var favs2 = JSON.parse(retrieve);
@@ -170,4 +166,9 @@ $(document).ready(function () {
             buttonClick();
         };
     }
+
+    $("#clear").on("click", function() {
+        $("#gifsLeft").html("");
+        $("#gifsRight").html("");
+    })
 });
