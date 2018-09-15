@@ -2,6 +2,10 @@
     margin: 2px;
 }
 
+.form-control{
+    margin: 2px;
+}
+
 .capitalize {
     text-transform: capitalize;   
 }

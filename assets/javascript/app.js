@@ -1,10 +1,12 @@
-var rappers = ["Snoop Dogg", "Kid Cudi", "A$AP Ferg", "Drake"];
+var rappers = ["Snoop Dogg", "Kid Cudi", "A$AP Ferg", "Drake", "De La Soul", "Dipset"];
 
 var favs = [];
 
+var links = [];
+
+var favLinks = [];
+
 var click = false;
-
-
 
 $(document).ready(function () {
 
@@ -38,13 +40,11 @@ $(document).ready(function () {
                     //number of frames in gif
                     var frames = results[index].images.original.frames;
                     var p1 = $("<p>").text("Number of frames: " + frames);
-                    
+
                     //download
                     var a = $("<a>");
                     a.attr("href", results[index].images.fixed_height.url);
                     a.attr("download", "text.gif");
-                    //a.attr("download", results[index]._score + ".gif");
-                    //a.attr("class", "download")
                     a.text("click to download");
 
                     //favs
@@ -54,20 +54,20 @@ $(document).ready(function () {
                     b.text("Fav this gif");
                     b.attr("id", "fav");
 
-                    
                     //source url for image from api (still by default)
                     var srcURL = results[index].images.fixed_height_still.url;
                     //source animated url for image from api
                     var animateURL = results[index].images.fixed_height.url;
                     //source still url for image from api
                     var stillURL = results[index].images.fixed_height_still.url;
-                    
+
                     //attributes are added to image from the previous variables
                     gif.attr("src", srcURL);
                     //gif.attr("data-state", "still");
                     gif.attr("data-still", stillURL);
                     gif.attr("data-animate", animateURL);
                     gif.attr("data-state", "still");
+
                     //everything is then added to image divs
                     gifDiv.prepend(gif);
                     gifDiv.append(p);
@@ -80,11 +80,26 @@ $(document).ready(function () {
                         $("#gifsRight").prepend(gifDiv);
                     }
 
-                    $(b).on("click", function() {
+                    $(b).on("click", function () {
+
+                        var elem = gif[0];
+
+                        favs.push(elem);
+
                         console.log(favs);
-                        favs.push(gif);
-                        console.log(favs);
+
+                        var outers = elem.outerHTML;
+
+                        links.push(outers);
+
+                        console.log(links);
+
                         $(gifDiv).remove();
+
+                        var string = JSON.stringify(links);
+                        localStorage.setItem("rappers", string);
+                        console.log(string);
+
                     });
 
                     $(gif).on("click", function () {
@@ -102,8 +117,6 @@ $(document).ready(function () {
 
                         }
 
-                        
-
                     });
 
                 });
@@ -113,28 +126,33 @@ $(document).ready(function () {
     }
 
     $("#favSection").on("click", function () {
-        $("#gifsLeft").html("");
-        $("#gifsRight").html("");
+        // $("#gifsLeft").html("");
+        // $("#gifsRight").html("");
 
-        $(favs).each(function(index, element) {
+        var retrieve = localStorage.getItem("rappers");
+        var favs2 = JSON.parse(retrieve);
+        console.log(favs2);
+
+        $(favs2).each(function (index, element) {
             console.log(element);
+            var gifDiv = $("<div class='space'>");
+            gifDiv.append(element);
             if (index % 2) {
                 console.log("even");
                 console.log(element);
-                $("#gifsRight").append(element);
-                //var gifDiv = $("<div class='space'>");
+                $("#gifsRight").prepend(gifDiv);
             } else {
                 console.log("odd");
                 console.log(element);
-                $("#gifsLeft").append(element);
+                $("#gifsLeft").prepend(gifDiv);
             }
-        })
+        });
+
     });
 
     $("#submit").on("click", function () {
         event.preventDefault();
         addRapper();
-        
     });
 
     function addRapper() {
