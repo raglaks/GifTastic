@@ -92,6 +92,8 @@ $(document).ready(function () {
                         //pushing them to links array, so that it can be JSON'ed for locacStorage
                         links.push(outers);
 
+                        localStorage.getItem("rappers");
+
                         var string = JSON.stringify(links);
                         localStorage.setItem("rappers", string);
                         console.log(string);
